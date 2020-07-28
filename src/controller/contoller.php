@@ -1,17 +1,12 @@
 <?php
 
-require_once ("../../config/AutoLoader.php");
+require_once ('../entities/ClientParticulier.php');
+require_once ('../entities/ClientEntreprise.php');
+require_once ('../entities/Compte.php');
+require_once ('../entities/Employeur.php');
 
+require_once ('../../bootstrap.php');
 
-use entities\ClientParticulier; 
-use entities\ClientEntreprise; 
-use entities\Compte; 
-use entities\Employeur; 
-
-use model\ClientP_model;
-use model\ClientE_model;
-use model\Compte_model;
-use model\Employeur_model;
 
 
 if(isset($_POST['soumettre'])){
@@ -19,10 +14,12 @@ if(isset($_POST['soumettre'])){
 
     if($_POST['check1']=='Particulier'){
 
+        $verif = FALSE;
+        $rv = FALSE;
+
         if(!empty($nom_client)  && !empty($prenom_client) && !empty($datenaiss) && !empty($cni) && !empty($adresse_client) && !empty($tel_client)){
            
             $ccpp = new ClientParticulier();
-            $cp = new ClientP_model();
             
             $ccpp->setNom($nom_client);
             $ccpp->setPrenom($prenom_client);
@@ -35,14 +32,16 @@ if(isset($_POST['soumettre'])){
             $ccpp->setStatut($statut);
             $ccpp->setSalaire($salaire);
 
-            $resultat = $cp-> ajouterClientParticulier($ccpp);
+            $entityManager->persist($ccpp);
+            $entityManager-> flush();
+            $verif = TRUE;
 
-            if($resultat==1){
+
+            if($verif==TRUE){
                 //if(!empty($type_compte)){
                     $liaison = $cni;
 
                     $cc = new Compte();
-                    $c = new Compte_model();
 
                     $cc->setType_compte($type_compte);
                     $cc->setAgence($numero_agence);
@@ -50,8 +49,9 @@ if(isset($_POST['soumettre'])){
                     $cc->setCle_rib($cle_rib);
                     $cc->setFrais_ouverture($frais_ouverture);
                     $cc->set_cni($liaison);
-
-                    $resultatc = $c->ajouterCompte($cc);
+                    
+                    $entityManager->persist($cc);
+                    $entityManager-> flush();
                 
                // }
 
@@ -60,30 +60,33 @@ if(isset($_POST['soumettre'])){
                         $statut = 1;
                         
                         $ee = new Employeur();
-                        $e = new Employeur_model();
 
                         $ee->setNumero_identification($numero_identification);
                         $ee->setDenomination($denomination);
                         $ee->setRaison_social($raison_social);
                         $ee->setAdresse($adresse_employeur);
 
-                        $resultatee = $e->ajouterEmployeur($ee);
+                        $entityManager->persist($ee);
+                        $entityManager-> flush();
+
+                        
                     }  
 
                 }else if($_POST['check3']=='autres'){
                     $statut = 0;
 
                 }
-
-            }header("location:../view/index.php?ok=$resultat");  
-        }header("location:../view/index.php?ok=$resultat");
+                $rv = TRUE;
+            }header("location:../view/index.php?ok=$rv");  
+        }header("location:../view/index.php?ok= $rv");
 
     }else if($_POST['check1']=='Entreprise'){
+
+        $verif = FALSE;
         
         if(!empty($statut_juridique)  && !empty($nom_entreprise) && !empty($adresse_entreprise) && !empty($tel_entreprise)&& !empty($ninea)){
  
             $ccee = new ClientEntreprise();
-            $ce = new ClientE_model();
 
             $ccee->setStatut($statut_juridique);
             $ccee->setDenomination($nom_entreprise);
@@ -91,16 +94,18 @@ if(isset($_POST['soumettre'])){
             $ccee->setAdresse($adresse_entreprise);
             $ccee->setTelephone($tel_entreprise);
             $ccee->setMail($email_entreprise);
+
+            $entityManager->persist($ccee);
+            $entityManager-> flush();
+            $verif = TRUE;
             
-            $resultat = $ce->ajouterClientEntreprise($ccee);
         }    
 
-        if($resultat==1){
+        if($verif==TRUE){
            // if(!empty($type_compte)){
                 $liaison = $ninea;
 
                 $cc = new Compte();
-                $c = new Compte_model();
 
                 $cc->setType_compte($type_compte);
                 $cc->setAgence($numero_agence);
@@ -109,10 +114,12 @@ if(isset($_POST['soumettre'])){
                 $cc->setFrais_ouverture($frais_ouverture);
                 $cc->set_ninea($liaison);
 
-                $resultatc = $c->ajouterCompte($cc);
+                $entityManager->persist($cc);
+                $entityManager-> flush();
+                $rv = TRUE;
            // }
-        }header("location:../view/index.php?ok=$resultat");
-    }header("location:../view/index.php?ok=$resultat"); 
+        }header("location:../view/index.php?ok=$rv");
+    }header("location:../view/index.php?ok=$rv"); 
 
 }
 ?>
