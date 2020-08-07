@@ -26,11 +26,25 @@ class Compte{
     private $cle_rib;
     /** @ORM\Column (type="integer") */
     private $frais_ouverture; 
-    /** @ORM\Column (type="integer") */
+     /** @ORM\Column (type="integer") */
     private $_cni;
     /** @ORM\Column (type="integer") */
     private $_ninea;
-    
+    /**
+     * Many compte have one client_entreprise. This is the owning side.
+     * @ORM\ManyToOne(targetEntity="ClientEntreprise", inversedBy="comptes")
+     * @ORM\JoinColumn(name="id_clientE", referencedColumnName="id")
+     */
+    private $id_clientE;
+
+    /**
+     * Many compte have one client_entreprise. This is the owning side.
+     * @ORM\ManyToOne(targetEntity="ClientParticulier", inversedBy="comptes")
+     * @ORM\JoinColumn(name="id_clientP", referencedColumnName="id")
+     */
+    private $id_clientP;
+
+
     function __construct(){
 
     }
@@ -95,6 +109,22 @@ class Compte{
     }
     function set_ninea($_ninea){
         $this->_ninea =$_ninea;
+        return $this;
+    }
+
+    function getId_clientE(){
+        return $this->id_clientE;
+    }
+    function setId_clientE($id_clientE){
+        $this->id_clientE =$id_clientE;
+        return $this;
+    }
+
+    function getId_clientP(){
+        return $this->id_clientP;
+    }
+    function setId_clientP($id_clientP){
+        $this->id_clientP =$id_clientP;
         return $this;
     }
 

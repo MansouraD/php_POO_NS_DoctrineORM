@@ -3,6 +3,7 @@
 use Doctrine\ORM\Mapping AS ORM; 
 
 
+
 /**
  * @ORM\Entity @ORM\Table(name="client_entreprise") 
 */
@@ -20,7 +21,7 @@ class ClientEntreprise {
     private $statut;
     /** @ORM\Column (type="string") */
     private $denomination;
-    /** @ORM\Column (type="string") */
+    /** @ORM\Column(type="string")  */
     private $ninea; 
     /** @ORM\Column (type="string") */
     private $adresse; 
@@ -28,6 +29,9 @@ class ClientEntreprise {
     private $telephone;
     /** @ORM\Column (type="string") */
     private $mail; 
+    /** @ORM\OneToMany(targetEntity="Compte", mappedBy="id_client")*/
+    private $comptes;
+
     
     function __construct(){
 
@@ -60,7 +64,6 @@ class ClientEntreprise {
         return $this;
     }
 
-
     function getAdresse(){
         return $this->adresse;
     }
@@ -77,7 +80,6 @@ class ClientEntreprise {
         return $this;
     }
 
-
     function getMail(){
         return $this->mail;
     }
@@ -85,6 +87,15 @@ class ClientEntreprise {
         $this->mail =$mail;
         return $this;
     }
+
+    function getComptes(){
+        return $this->comptes;
+    }
+    function setComptes($comptes){
+        $this->comptes =$comptes;
+        return $this;
+    }
+
 
 }
 

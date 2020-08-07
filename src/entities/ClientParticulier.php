@@ -21,7 +21,7 @@ class ClientParticulier {
     private $prenom;
     /** @ORM\Column (type="integer") */
     private $date_de_naissance;
-    /** @ORM\Column (type="integer") */
+    /** @ORM\Column (type="string") */
     private $cni;
     /** @ORM\Column (type="string") */
     private $adresse; 
@@ -35,7 +35,14 @@ class ClientParticulier {
     private $statut;
     /** @ORM\Column (type="integer") */
     private $salaire;
-
+    /** @ORM\OneToMany(targetEntity="Compte", mappedBy="id_client") */
+    private $comptes;
+    /** 
+     * @ORM\ManyToOne(targetEntity="Employeur", inversedBy="employes") 
+     * @ORM\JoinColumn(name="employeur", referencedColumnName="id")
+    */
+    private $employeur;
+    
     function __construct(){
 
     }
@@ -126,6 +133,23 @@ class ClientParticulier {
         $this->salaire =$salaire;
         return $this;
     }
+
+    function getComptes(){
+        return $this->comptes;
+    }
+    function setComptes($comptes){
+        $this->comptes =$comptes;
+        return $this;
+    }
+
+    function getEmployeur(){
+        return $this->employeur;
+    }
+    function setEmployeur($employeur){
+        $this->employeur =$employeur;
+        return $this;
+    }
+
 
 }
 

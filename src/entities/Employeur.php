@@ -26,8 +26,14 @@ class Employeur {
     private $raison_social;
     /** @ORM\Column (type="string") */
     private $adresse; 
+    /**
+     * @ORM\Column (type="string") 
+     * @ORM\OneToMany(targetEntity="ClientParticulier ", mappedBy="employeur")
+     */
+    private $employes;
     
-    
+
+
     function __construct(){
 
     }
@@ -67,6 +73,15 @@ class Employeur {
         $this->adresse =$adresse;
         return $this;
     }
+
+    function getEmployes(){
+        return $this->employes;
+    }
+    function setEmployes($employes){
+        $this->adresse =$employes;
+        return $this;
+    }
+
 
 }
 

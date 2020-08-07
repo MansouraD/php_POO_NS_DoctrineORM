@@ -83,6 +83,7 @@ if(isset($_POST['soumettre'])){
     }else if($_POST['check1']=='Entreprise'){
 
         $verif = FALSE;
+        $rv = FALSE;
         
         if(!empty($statut_juridique)  && !empty($nom_entreprise) && !empty($adresse_entreprise) && !empty($tel_entreprise)&& !empty($ninea)){
  
